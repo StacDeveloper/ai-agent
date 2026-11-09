@@ -16,4 +16,4 @@ export const controllerforLogout = async (req, res) => {
     res.json({ success: true, message: 'Signed Out' })
 }
 
-export const forMe = (req, res) => res.json({ success:true, agent:req.agent })
+export const forMe = (req, res) => res.json({ success: true, agent: req.agent })
