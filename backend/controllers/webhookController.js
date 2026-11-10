@@ -1,11 +1,11 @@
-import { config } from "../configs/config"
-import { query } from '../configs/db'
-import { HttpError } from '../configs/error'
-import { log } from '../configs/log'
-import { knownBrand } from '../configs/knowledgeBase'
-import { handleIncomingMessage } from '../configs/messages'
-import { verifySignature } from '../configs/signature'
-import { cleanCustomer, cleanText } from '../configs/validate'
+import { config } from "../configs/config.js"
+import { query } from '../configs/db.js'
+import { HttpError } from '../configs/error.js'
+import { log } from '../configs/log.js'
+import { knownBrand } from '../configs/knowledgeBase.js'
+import { handleIncomingMessage } from '../configs/messages.js'
+import { verifySignature } from '../configs/signature.js'
+import { cleanCustomer, cleanText } from '../configs/validate.js'
 
 
 function finish(id, status, error = null) {

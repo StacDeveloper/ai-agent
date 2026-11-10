@@ -1,4 +1,4 @@
-import { clearSession, login, setSession } from "../configs/auth"
+import { clearSession, login, setSession } from "../configs/auth.js"
 
 export const controllerforLogin = async (req, res, next) => {
     try {

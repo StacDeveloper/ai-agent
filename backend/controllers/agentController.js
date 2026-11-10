@@ -1,7 +1,7 @@
-import { query, withTransaction } from "../configs/db"
-import { HttpError } from "../configs/error";
-import { requeueDraft } from '../configs/draft'
-import { cleanText } from '../configs/validate'
+import { query, withTransaction } from "../configs/db.js"
+import { HttpError } from "../configs/error.js";
+import { requeueDraft } from '../configs/draft.js'
+import { cleanText } from '../configs/validate.js'
 
 const id = (value) => {
     if (!/^\d{1,18}$/.test(String(value))) throw new HttpError(400, 'Invalid ID ');

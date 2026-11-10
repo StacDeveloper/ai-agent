@@ -1,4 +1,4 @@
-import { query } from '../configs/db'
+import { query } from '../configs/db.js'
 
 const MAX_CONCURRENT = 3
 let running = 0

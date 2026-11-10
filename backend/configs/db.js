@@ -1,6 +1,6 @@
-import { config } from "../configs/config"
+import { config } from "../configs/config.js"
 import pg from "pg"
-import { log } from "../configs/log"
+import { log } from "../configs/log.js"
 
 export const pgpool = new pg.Pool({
     connectionString: config.databaseUrl,

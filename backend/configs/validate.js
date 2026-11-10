@@ -1,4 +1,4 @@
-import { HttpError } from "../configs/error"
+import { HttpError } from "../configs/error.js"
 
 export const MAX_TEXT = 2000;
 

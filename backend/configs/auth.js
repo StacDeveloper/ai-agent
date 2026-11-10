@@ -1,8 +1,8 @@
 import jwt from "jsonwebtoken"
 import bcrypt from "bcryptjs"
-import { config } from "../configs/config"
-import { query } from '../configs/db'
-import { HttpError } from "./error"
+import { config } from "../configs/config.js"
+import { query } from '../configs/db.js'
+import { HttpError } from "./error.js"
 
 const COOKIE = "vc_session"
 const SEVEN_DAYS_MS = 7 * 24 * 3600 * 1000;

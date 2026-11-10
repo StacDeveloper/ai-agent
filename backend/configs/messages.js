@@ -1,5 +1,5 @@
-import { withTransaction } from '../configs/db'
-import { generateDraftInBackgrond } from "../configs/draft"
+import { withTransaction } from '../configs/db.js'
+import { generateDraftInBackgrond } from "../configs/draft.js"
 
 export const handleIncomingMessage = async ({ externalMessageId, customer, text, sendAt = null }) => {
     const stored = await withTransaction(async (db) => {

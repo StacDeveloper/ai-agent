@@ -1,7 +1,7 @@
-import { cleanCustomer, cleanText } from '../configs/validate'
-import { HttpError } from '../configs/error'
-import { query } from '../configs/db'
-import { handleIncomingMessage } from '../configs/messages'
+import { cleanCustomer, cleanText } from '../configs/validate.js'
+import { HttpError } from '../configs/error.js'
+import { query } from '../configs/db.js'
+import { handleIncomingMessage } from '../configs/messages.js'
 import crypto from 'node:crypto'
 
 

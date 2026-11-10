@@ -1,6 +1,6 @@
-import { config } from '../configs/config'
-import { log } from '../configs/log'
-import { knowledgeBaseAsText } from '../configs/knowledgeBase'
+import { config } from '../configs/config.js'
+import { log } from '../configs/log.js'
+import { knowledgeBaseAsText } from '../configs/knowledgeBase.js'
 
 const TIMEOUT_MS = 20_000
 const RETRY_DELAYS_MS = [1000, 3000]
