@@ -79,19 +79,19 @@ const askGemini = async (body) => {
     try {
         parsed = JSON.parse(raw)
     } catch (error) {
-        throw Object.assign(new Error('Gemini returned invalid JSON'), {retryable:true})
+        throw Object.assign(new Error('Gemini returned invalid JSON'), { retryable: true })
     }
 
-    const reply  = typeof parsed.reply ==='string' ? parsed.reply.trim() : '';
-    if(!reply) throw Object.assign(new Error('Gemini returned an empty reply'), {retryable:true})
+    const reply = typeof parsed.reply === 'string' ? parsed.reply.trim() : '';
+    if (!reply) throw Object.assign(new Error('Gemini returned an empty reply'), { retryable: true })
 
 
-        return{
-            reply:reply.slice(0, 1500),
-            needsHuman:parsed.needs_human === true,
-            reason:typeof parsed.reason === 'string' ? parsed.reason.trim().slice(0,300) : '',
-            model:config.gemini.model
-        }
+    return {
+        reply: reply.slice(0, 1500),
+        needsHuman: parsed.needs_human === true,
+        reason: typeof parsed.reason === 'string' ? parsed.reason.trim().slice(0, 300) : '',
+        model: config.gemini.model
+    }
 
 }
 
