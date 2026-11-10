@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser"
 import authRoutes from "./routes/authroutes"
 import { middlewareforApp } from "./middleware/middlewareforApp"
 import { pgpool } from "./configs/db"
+import agentRoutes from "./routes/agentRoutes"
 dotenv.config()
 
 const app = express()
@@ -17,6 +18,7 @@ app.use(cookieParser())
 app.set("trust-proxy", 1)
 app.use('/webhook', webhookRouter)
 app.use('/api/auth', authRoutes)
+app.use('/api/agent', agentRoutes)
 app.use(middlewareforApp)
 
 process.on('unhandledRejection', (reason) => log('error', 'unhandledRejections', { error: String(reason) }));
