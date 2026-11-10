@@ -6,6 +6,7 @@ import authRoutes from "./routes/authroutes"
 import { middlewareforApp } from "./middleware/middlewareforApp"
 import { pgpool } from "./configs/db"
 import agentRoutes from "./routes/agentRoutes"
+import customerRoutes from "./routes/customerRoutes"
 dotenv.config()
 
 const app = express()
@@ -14,12 +15,15 @@ const PORT = process.env.PORT || 4000
 // middlewares
 app.use(express.json({ limit: '20kb' }))
 app.use(cookieParser())
-
+app.use(middlewareforApp)
 app.set("trust-proxy", 1)
+
+// routes
 app.use('/webhook', webhookRouter)
 app.use('/api/auth', authRoutes)
 app.use('/api/agent', agentRoutes)
-app.use(middlewareforApp)
+app.use('/api/customer', customerRoutes)
+
 
 process.on('unhandledRejection', (reason) => log('error', 'unhandledRejections', { error: String(reason) }));
 
