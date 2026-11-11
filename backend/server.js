@@ -1,12 +1,13 @@
 import express from "express"
 import dotenv from "dotenv"
-import webhookRouter from "./routes/webhookroutes"
+import cors from 'cors'
+import webhookRouter from "./routes/webhookroutes.js"
 import cookieParser from "cookie-parser"
-import authRoutes from "./routes/authroutes"
-import { middlewareforApp } from "./middleware/middlewareforApp"
-import { pgpool } from "./configs/db"
-import agentRoutes from "./routes/agentRoutes"
-import customerRoutes from "./routes/customerRoutes"
+import authRoutes from "./routes/authroutes.js"
+import { middlewareforApp } from "./middleware/middlewareforApp.js"
+import { pgpool } from "./configs/db.js"
+import agentRoutes from "./routes/agentRoutes.js"
+import customerRoutes from "./routes/customerRoutes.js"
 dotenv.config()
 
 const app = express()
@@ -15,6 +16,7 @@ const PORT = process.env.PORT || 4000
 // middlewares
 app.use(express.json({ limit: '20kb' }))
 app.use(cookieParser())
+app.use(cors({ origin: process.env.FRONTEND_URL, credentials:true }))
 app.use(middlewareforApp)
 app.set("trust-proxy", 1)
 

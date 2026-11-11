@@ -1,6 +1,6 @@
 import express from 'express'
-import { customerRateLimit } from '../ratelimiters/customerateLimit'
-import { getConversationForCustomer, getMessagesForCustomer } from '../controllers/customerController'
+import { customerRateLimit } from '../ratelimiters/customerateLimit.js'
+import { getConversationForCustomer, getMessagesForCustomer } from '../controllers/customerController.js'
 
 const customerRoutes = express.Router()
 

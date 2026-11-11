@@ -1,6 +1,6 @@
 import express from 'express'
 import loginEndPointLimit from '../ratelimiters/loginratelimit.js'
-import { controllerforLogin, controllerforLogout, forMe } from '../controllers/controllers.js'
+import { controllerforLogin, controllerforLogout, forMe } from '../controllers/logincontrollers.js' 
 import { requireAgent } from '../configs/auth.js'
 
 const authRoutes= express.Router()

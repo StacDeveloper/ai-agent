@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { api } from "./api/api";
-
+import CustomerView from '../src/page-components/CustmerView.jsx'
 export default function App() {
   const [view, setView] = useState('customer')
   const [agent, setAgent] = useState(undefined)

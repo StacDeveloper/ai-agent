@@ -35,3 +35,5 @@ export function formatDateTime(iso) {
     const date = new Date(iso)
     return date.toDateString() === new Date().toDateString() ? timeFmt.format(date) : `${dateFmt.format(date)}, ${timeFmt.format(date)}`;
 }
+
+export const url = import.meta.env.VITE_BASE_URL
