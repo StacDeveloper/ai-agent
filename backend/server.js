@@ -8,6 +8,7 @@ import { middlewareforApp } from "./middleware/middlewareforApp.js"
 import { pgpool } from "./configs/db.js"
 import agentRoutes from "./routes/agentRoutes.js"
 import customerRoutes from "./routes/customerRoutes.js"
+import { log } from "./configs/log.js"
 dotenv.config()
 
 const app = express()

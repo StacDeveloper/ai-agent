@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { usePolling } from "../src/lib/usePolling";
-import { url } from "../src/api/api";
+import { usePolling } from "../lib/usePolling.js";
+import { url } from "../api/api.js";
 import { useState } from "react";
 
 export default function Inbox({ agent, onSignedOut }) {

@@ -3,6 +3,9 @@ import bcrypt from "bcryptjs"
 import { config } from "../configs/config.js"
 import { query } from '../configs/db.js'
 import { HttpError } from "./error.js"
+import crypto from 'node:crypto'
+import 'dotenv/config'
+
 
 const COOKIE = "vc_session"
 const SEVEN_DAYS_MS = 7 * 24 * 3600 * 1000;
@@ -10,11 +13,16 @@ const SEVEN_DAYS_MS = 7 * 24 * 3600 * 1000;
 const DUMMY_HASH = bcrypt.hashSync('NOT-a-real-password', 10);
 
 export async function login(email, password) {
-    if (typeof email !== "string" || typeof password !== 'string') throw new HttpError(400, 'Email and password are required');
-    const { rows: [agents] } = await query(`select id, email, name, password_hash from agents where email = $1`, [email.trimEnd().toLocaleLowerCase()])
-    const ok = await bcrypt.compare(password, agents?.email, agents?.password_hash ?? DUMMY_HASH)
-    if (!agents || !ok) throw new HttpError(401, "Incorrect email or password!")
-    return { id: agents.id, email: agents.email, name: agents.name }
+    if (typeof email !== 'string' || typeof password !== 'string') {
+        throw new HttpError(400, 'Email and password are required');
+    }
+    const { rows: [agent] } = await query(
+        `select id, email, name, password_hash from agents where email = $1`,
+        [email.trim().toLowerCase()],
+    );
+    const ok = await bcrypt.compare(password, agent?.password_hash ?? DUMMY_HASH);
+    if (!agent || !ok) throw new HttpError(401, 'Incorrect email or password');
+    return { id: agent.id, email: agent.email, name: agent.name };
 }
 
 export async function setSession(res, agent) {
@@ -37,4 +45,34 @@ export async function requireAgent(req, res, next) {
     } catch (error) {
         next(new HttpError(401, 'Sign is required'));
     }
+}
+
+export async function registerUser(name, email, password, code) {
+    if ([!name, email, password, code].every((mandem) => typeof mandem !== 'string')) {
+        throw new HttpError('400', 'Name, email, password and code should be of right characters')
+    }
+    name = name.trim()
+    email = email.trim()
+    if (!name || name.length > 100) throw new HttpError(400, 'Enter your name')
+    if (!/^\S+@\S+\.\S+$/.test(email)) throw new HttpError(400, 'Enter a valid email');
+    if (password.length < 8) throw new HttpError(400, 'Password must be at least 8 characters')
+
+    console.log('set:', Boolean(process.env.AGENT_SIGNUP_CODE), 'env len:', process.env.AGENT_SIGNUP_CODE?.length, 'got len:', code?.length)
+    const a = Buffer.from(code.trim())
+    const b = Buffer.from(process.env.AGENT_SIGNUP_CODE || '')
+    if (!b.length || a.length !== b.length || !crypto.timingSafeEqual(a, b)) {
+        throw new HttpError(403, 'Invalid access code');
+    }
+    try {
+        const { rows: [agent] } = await query(
+            `insert into agents (email, name, password_hash) values ($1, $2, $3)
+       returning id, email, name`,
+            [email, name, await bcrypt.hash(password, 10)],
+        );
+        return agent;
+    } catch (err) {
+        if (err.code === '23505') throw new HttpError(409, 'An account with this email already exists');
+        throw err;
+    }
+
 }

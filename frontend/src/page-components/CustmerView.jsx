@@ -33,7 +33,7 @@ const CustomerView = () => {
     : TEST_CUSTOMERS.find((c) => c.id === choice);
   const customerReady = choice !== 'custom' || (customer.name && customer.phone.replace(/\D/g, '').length >= 6);
 
-  const chat = usePolling(() => (customerReady ? api.get(`${url}/api/customer/conversations/${encodeURIComponent(customer.id)}`) : Promise.resolve({ messages: [] })), 3000, [customer.id, customerReady])
+  const chat = usePolling(() => (customerReady ? api.get(`${url}/api/customer/conversation?customer_id=${encodeURIComponent(customer.id)}`) : Promise.resolve({ messages: [] })), 3000, [customer.id, customerReady])
 
   const messages = chat.data?.messages ?? []
 

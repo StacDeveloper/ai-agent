@@ -1,3 +1,5 @@
+import { HttpError } from "../configs/error.js";
+
 export const middlewareforApp = (err, req, res, next) => {
     if (err.type === 'entity.too.large') err = new HttpError(413, 'Request body is too large')
     if (err.type === 'entity.parse.failed') err = new HttpError(400, 'Body is not valid JSON')
