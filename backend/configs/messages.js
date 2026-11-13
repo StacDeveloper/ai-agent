@@ -1,6 +1,7 @@
 import { withTransaction } from '../configs/db.js'
 import { generateDraftInBackgrond } from "../configs/draft.js"
 
+
 export const handleIncomingMessage = async ({ externalMessageId, customer, text, sendAt = null }) => {
     const stored = await withTransaction(async (db) => {
         const { rows: [cust] } = await db.query(
@@ -28,7 +29,7 @@ export const handleIncomingMessage = async ({ externalMessageId, customer, text,
         if (!message) return { duplicate: true, conversationId: conv.id }
         await db.query(`update conversations set last_message_at = now() where id = $1`, [conv.id]);
 
-        const draft = (await db.query(`insert into drafts (message_id, conversation_id) values ($1, $2) returning id`, [message.id, conv.id]))
+        const draft = (await db.query(`insert into drafts (message_id, conversation_id) values ($1, $2) returning id`, [message.id, conv.id])).rows[0]
         return { duplicate: false, conversationId: conv.id, messageId: message.id, draftId: draft.id }
     })
 

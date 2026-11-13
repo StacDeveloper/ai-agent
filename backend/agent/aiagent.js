@@ -2,9 +2,9 @@ import { config } from '../configs/config.js'
 import { log } from '../configs/log.js'
 import { knowledgeBaseAsText } from '../configs/knowledgeBase.js'
 
-const TIMEOUT_MS = 20_000
+const TIMEOUT_MS = 45_000
 const RETRY_DELAYS_MS = [1000, 3000]
-const sleep = (ms) => new Promise((res) => setTimeout(r, ms))
+const sleep = (ms) => new Promise((res) => setTimeout(res, ms))
 
 function systemPrompt(brandId) {
     return `You draft replies for the support team of Verdant & Co, an online skincare brand. A human agent reviews every draft before it is send. 
@@ -63,8 +63,8 @@ const askGemini = async (body) => {
     }
 
     const data = await res.json()
-    const candidate = data.candidate?.[0]
-    const raw = candidate?.content?.parts?.map((p) => p.text ?? '').join('')
+    const candidate = data.candidates?.[0];
+    const raw = candidate?.content?.parts?.map((p) => p.text ?? '').join('');
 
     if (!raw) {
         const why = data.promptFeedback?.blockReason || candidate?.finishReason || 'empty response';
@@ -102,20 +102,16 @@ export const suggestReply = async ({ brandId, customername, history }) => {
 
     const body = {
         systemInstruction: { parts: [{ text: systemPrompt(brandId) }] },
-        content: [
-            {
-                role: 'user',
-                parts: [{ text: `Customer name: ${customername} Conversation (JSON): \n ${JSON.stringify(history)}` }]
-
-            }
+        contents: [
+            { role: 'user', parts: [{ text: `Customer name: ${customername}\nConversation (JSON):\n${JSON.stringify(history)}` }] },
         ],
         generationConfig: {
             temperature: 0.2,
             maxOutputTokens: 2048,
             responseMimeType: 'application/json',
-            responseSchema: Response_Schema
-        }
-    }
+            responseSchema: Response_Schema,
+        },
+    };
 
 
     let lastError;
@@ -123,7 +119,7 @@ export const suggestReply = async ({ brandId, customername, history }) => {
         try {
             return await askGemini(body);
         } catch (err) {
-            lastError(err)
+            lastError = err
             log('warn', 'gemini_attempt_failed', { attempt: a + 1, error: err.message, retryable: err.retryable });
             if (!err.retryable || a === RETRY_DELAYS_MS.length) break;
             await sleep(RETRY_DELAYS_MS[a]);

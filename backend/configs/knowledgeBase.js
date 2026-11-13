@@ -1,5 +1,5 @@
 const KB = {
-    verdantco: [
+    'verdant-co': [
         ['Shipping', 'Orders ship within 24 hours, Monday to Saturday. Delivery takes 3-5 business days in metro cities and 5-8 business days elsewhere in India.'],
         ['Address change', 'The delivery address can be changed only before the order has shipped, and only if the customer contacts us within 12 hours of placing it. After shipping, the address cannot be changed.'],
         ['Cancellation', 'An order can be cancelled before it ships. After it ships, the customer can refuse delivery and a refund is issued once the parcel returns to us.'],
@@ -10,7 +10,7 @@ const KB = {
     ],
 };
 
-export const knownBrand = (brandId) => brandId in KB
+export const knownBrand = (brandId) => Object.hasOwn(KB, brandId)
 export function knowledgeBaseAsText(brandId) {
-    return KB[brandId].map(([topic, policy]) => `- ${topic}: ${policy}`).join('\n');
+    return KB[`${brandId}`].map(([topic, policy]) => `- ${topic}: ${policy}`).join('\n');
 }
