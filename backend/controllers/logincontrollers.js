@@ -1,7 +1,6 @@
 import { clearSession, login, setSession } from "../configs/auth.js"
 
 export const controllerforLogin = async (req, res, next) => {
-    console.log('Api called', req)
     try {
         const agent = await login(req.body?.email, req.body?.password)
         console.log(res, agent)

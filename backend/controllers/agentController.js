@@ -65,8 +65,16 @@ export const getParticularConversation = async (req, res, next) => {
 }
 
 export const controllerforApproval = async (req, res, next) => {
+    console.log('PARAMS:', req.params);
+    console.log('BODY:', req.body);
+    console.log('URL:', req.originalUrl);
+    console.log('agent-id', req?.agent?.id)
     try {
+
         const draftId = id(req.params.id)
+        if (!draftId) {
+            return res.status(400).json({ success: false, message: 'Draft Id not received' })
+        }
         const text = cleanText(req.body?.text, 'Reply');
         const message = await withTransaction(async (db) => {
             const { rows: [draft] } = await db.query(
@@ -78,7 +86,7 @@ export const controllerforApproval = async (req, res, next) => {
             const { rows: [msg] } = await db.query(
                 `insert into messages (conversation_id, sender, agent_id, text, sent_at)
                  values ($1, 'agent', $2, $3, now()) returning id, sender, text, created_at`,
-                [draft.conversation_id, req.agent.id, text],
+                [draft.conversation_id, req.agent?.id, text],
             );
             await db.query(
                 `update drafts set status = 'used', reply_message_id = $2, edited = ($3::text is distinct from text),

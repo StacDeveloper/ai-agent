@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useState } from 'react';
 import { usePolling } from '../lib/usePolling';
-import { api, formatDateTime } from '../api/api';
+import { api, formatDateTime } from '../api/api.js';
 
 const TEST_CUSTOMERS = [
   { id: 'cust_1042', name: 'Soham Mule', phone: '+91 9871237683' },

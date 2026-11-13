@@ -1,16 +1,15 @@
 import { useRef } from "react";
 import { useState } from "react";
-import { api, url } from "../src/api/api";
+import { api, url } from "../api/api.js";
 import { useEffect } from "react";
 
 export function DraftBox({ draft, onChanged }) {
   const [text, setText] = useState('');
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
-  const dirty = useRef(false); // true once the agent has typed, so a late AI draft never overwrites their text
+  const dirty = useRef(false);
   const lastId = useRef(null);
-
-    
+  console.log(draft.id)
 
   useEffect(() => {
     if (draft?.id !== lastId.current) {

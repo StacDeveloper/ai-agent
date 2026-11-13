@@ -1,7 +1,8 @@
 import { useRef } from "react";
-import { api, url } from "../src/api/api";
-import { usePolling } from "../src/lib/usePolling";
+import { api, formatDateTime, url } from "../api/api.js";
+import { usePolling } from "../lib/usePolling.js";
 import { useEffect } from "react";
+import { DraftBox } from "./DraftBox.jsx";
 
 export default function ConversationPanel({ id, onBack, onSignedOut, onChanged }) {
   const conv = usePolling(() => api.get(`${url}/api/agent/conversations/${id}`), 2500, [id]);
@@ -27,7 +28,7 @@ export default function ConversationPanel({ id, onBack, onSignedOut, onChanged }
           <div key={m.id} className={`bubble ${m.sender === 'customer' ? 'theirs' : 'mine'}`}>
             {m.sender === 'agent' && <b>Agent reply</b>}
             <p>{m.text}</p>
-            <time>{formatTime(m.created_at)}</time>
+            <time>{formatDateTime(m.created_at)}</time>
           </div>
         ))}
         <div ref={endRef} />
