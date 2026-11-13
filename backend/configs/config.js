@@ -11,7 +11,7 @@ export const config = {
     port: Number(process.env.PORT) || 3000,
     isProd: process.env.NODE_ENV === "production",
     databaseUrl: process.env.DATABASE_URL,
-    jwtSecret: process.env.JWT_SECRET,
+    jwtSecret: process.env.JWT_SECRET ,
     webhookSecret: process.env.WEBHOOK_SECRET,
     brandId: "verdant-co",
     gemini: {

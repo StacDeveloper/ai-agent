@@ -3,16 +3,29 @@ import { useState } from "react";
 import { api } from "./api/api";
 import CustomerView from '../src/page-components/CustmerView.jsx'
 import AgentView from '../src/page-components/AgentView.jsx'
+
+
 export default function App() {
   const [view, setView] = useState('customer')
   const [agent, setAgent] = useState(undefined)
 
-  const url = import.meta.env.VITE_BASE_URL || 'http://localhost:4000'
+  const url = import.meta.env.VITE_BASE_URL
+
 
   useEffect(() => {
-    api.get(`${url}/api/auth/forMe`).then((res) => setAgent(res.agent)).catch(() => setAgent(null))
-  }, [])
-
+    if (!url) { setAgent(null); return; }
+    console.log('VITE_BASE_URL =', import.meta.env.VITE_BASE_URL);
+    let cancelled = false;
+    (async () => {
+      try {
+        const res = await api.get(`${url}/api/auth/forMe`);
+        if (!cancelled) setAgent(res.agent);
+      } catch {
+        if (!cancelled) setAgent(null);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [url]);
   return (
     <div className="app">
       <header className="topbar">

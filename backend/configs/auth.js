@@ -20,30 +20,36 @@ export async function login(email, password) {
         `select id, email, name, password_hash from agents where email = $1`,
         [email.trim().toLowerCase()],
     );
+
     const ok = await bcrypt.compare(password, agent?.password_hash ?? DUMMY_HASH);
     if (!agent || !ok) throw new HttpError(401, 'Incorrect email or password');
     return { id: agent.id, email: agent.email, name: agent.name };
 }
 
 export async function setSession(res, agent) {
-    const token = await jwt.sign({ sub: agent.id, name: agent.name, email: agent.email })
+    const token = await jwt.sign({ sub: agent.id, name: agent.name, email: agent.email }, config.jwtSecret, { expiresIn: '7d' })
     res.cookie(COOKIE, token, {
         httpOnly: true,
         sameSite: 'lax',
-        secure: config.isProd,
+        secure: false,
+        path: '/',
         maxAge: SEVEN_DAYS_MS
     })
 }
 
-export const clearSession = (res) => res.clearCookie(COOKIE)
+export const clearSession = (res) => res.clearCookie(COOKIE, { path: '/' })
 
 export async function requireAgent(req, res, next) {
+    console.log('cookies:', req.cookies, 'COOKIE name:', COOKIE);
     try {
-        const payload = await jwt.verify(res.cookie?.[COOKIE] ?? "", config.jwtSecret)
-        req.agent = { id: payload.sub, name: payload.name, email: payload.email }
-        next()
+        const token = req.cookies?.[COOKIE];
+        if (!token) throw new HttpError(401, 'Sign in is required');
+        const payload = jwt.verify(token, config.jwtSecret);
+        req.agent = { id: payload.sub, name: payload.name, email: payload.email };
+        next();
     } catch (error) {
-        next(new HttpError(401, 'Sign is required'));
+        console.log('auth failed:', error.message);
+        next(error instanceof HttpError ? error : new HttpError(401, 'Sign in is required'));
     }
 }
 

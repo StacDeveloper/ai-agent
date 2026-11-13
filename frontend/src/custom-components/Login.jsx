@@ -24,6 +24,7 @@ export default function Login({ onSignedIn }) {
             const body = registering
                 ? form
                 : { email: form.email, password: form.password };
+                
             console.log(url, path, body)
             const res = await api.post(`${url}${path}`, body);
             onSignedIn(res.agent);

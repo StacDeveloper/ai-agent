@@ -1,9 +1,11 @@
 import { clearSession, login, setSession } from "../configs/auth.js"
 
 export const controllerforLogin = async (req, res, next) => {
+    console.log('Api called', req)
     try {
         const agent = await login(req.body?.email, req.body?.password)
-        setSession(res, agent)
+        console.log(res, agent)
+        await setSession(res, agent)
         res.json({ success: true, agent })
     } catch (error) {
         next(error)
@@ -16,4 +18,4 @@ export const controllerforLogout = async (req, res) => {
     res.json({ success: true, message: 'Signed Out' })
 }
 
-export const forMe = (req, res) => res.json({ success: true, agent: req.agent })
+export const forMe = (req, res) => {console.log('Api called', req); res.json({ success: true, agent: req.agent })}

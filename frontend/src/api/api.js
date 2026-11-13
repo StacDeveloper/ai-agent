@@ -10,17 +10,17 @@ async function request(method, url, body) {
     try {
         res = await fetch(url, {
             method,
-            credentials: 'same-origin',
-            headers: body ? { 'Content-type': 'application/json' } : undefined,
-            body: body ? JSON.stringify(body) : undefined
-        })
-    } catch (error) {
-        throw new ApiError(0, 'Cannot react the backend server. Check your connection.')
+            credentials: 'include',
+            headers: body ? { 'Content-Type': 'application/json' } : undefined,
+            body: body ? JSON.stringify(body) : undefined,
+        });
+    } catch {
+        throw new ApiError(0, 'Cannot reach the backend server. Check your connection.');
     }
 
-    const data = await res.json().catch(() => ({}))
-    if (!res.success) throw new ApiError(res.status, data.error || `Request failed (${res.status})`)
-    return data
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new ApiError(res.status, data.error || data.message || `Request failed (${res.status})`);
+    return data;
 }
 
 export const api = {
