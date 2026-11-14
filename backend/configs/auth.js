@@ -31,8 +31,7 @@ export async function setSession(res, agent) {
     res.cookie(COOKIE, token, {
         httpOnly: true,
         sameSite: 'lax',
-        secure: false,
-        path: '/',
+        secure: true,
         maxAge: SEVEN_DAYS_MS
     })
 }
