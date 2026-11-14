@@ -30,7 +30,7 @@ export async function setSession(res, agent) {
     const token = await jwt.sign({ sub: agent.id, name: agent.name, email: agent.email }, config.jwtSecret, { expiresIn: '7d' })
     res.cookie(COOKIE, token, {
         httpOnly: true,
-        sameSite: 'lax',
+        sameSite: 'none',
         secure: true,
         maxAge: SEVEN_DAYS_MS
     })
