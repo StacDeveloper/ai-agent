@@ -3,7 +3,7 @@ import { log } from '../configs/log.js'
 import { knowledgeBaseAsText } from '../configs/knowledgeBase.js'
 
 const TIMEOUT_MS = 45_000
-const RETRY_DELAYS_MS = [1000, 3000]
+const RETRY_DELAYS_MS = [2000, 5000, 10000]
 const sleep = (ms) => new Promise((res) => setTimeout(res, ms))
 
 function systemPrompt(brandId) {
@@ -37,8 +37,8 @@ const Response_Schema = {
 
 
 
-const askGemini = async (body) => {
-    const url = `${config.gemini.baseurl}/models/${config.gemini.model}:generateContent`;
+const askGemini = async (body, model) => {
+    const url = `${config.gemini.baseurl}/models/${model}:generateContent`;
 
     let res;
     try {
@@ -116,8 +116,9 @@ export const suggestReply = async ({ brandId, customername, history }) => {
 
     let lastError;
     for (let a = 0; a <= RETRY_DELAYS_MS.length; a++) {
+        const model = a === RETRY_DELAYS_MS.length && config.geminiFallBackModel ? config.geminiFallBackModel : config.gemini.model
         try {
-            return await askGemini(body);
+            return await askGemini(body, model);
         } catch (err) {
             lastError = err
             log('warn', 'gemini_attempt_failed', { attempt: a + 1, error: err.message, retryable: err.retryable });

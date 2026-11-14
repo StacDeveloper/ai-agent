@@ -18,5 +18,6 @@ export const config = {
         apikey: process.env.GEMINI_API_KEY,
         model: process.env.GEMINI_MODEL,
         baseurl: process.env.GEMINI_BASE_URL
-    }
+    },
+    geminiFallBackModel:process.env.GEMINI_FALLBACK_MODEL
 }
